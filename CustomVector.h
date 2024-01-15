@@ -19,7 +19,14 @@ public:
     explicit CustomVector(int initialCapacity);
     CustomVector(const CustomVector& other);
     CustomVector& operator=(const CustomVector& other);
-    //CustomVector(std::initializer_list<T> initList) : size(initList.size()), capacity(initList.size());
+
+    CustomVector(std::initializer_list<T> values) : size_(values.size()), capacity_(values.size()) {
+        data = new T[capacity_];
+        int i = 0;
+        for (const T& value : values) {
+            data[i++] = value;
+        }
+    }
 
     void push_back(const T& value);
     void pop_back();
