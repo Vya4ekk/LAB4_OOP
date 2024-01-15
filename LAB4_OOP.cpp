@@ -1,7 +1,6 @@
-﻿#include <iostream>
+#include <iostream>
 #include <functional>
 #include <algorithm>
-using namespace std;
 
 #define USE_STL_VECTOR 1
 
@@ -14,28 +13,50 @@ using CV = CustomVector<T>;
 template<typename T>
 using CV = std::vector<T>;
 #endif
+
+template <typename Iterator, typename Function>
+void my_for_each(Iterator begin, Iterator end, Function func) {
+    for (auto it = begin; it != end; ++it) {
+        func(*it);
+    }
+}
+
 int main() {
 
 
-    CV<int> v;
-    v.push_back(2);
-    v.push_back(3);
-    v.push_back(5);
-    v.push_back(8);
-    v.push_back(8);
-    v.push_back(8);
-    v.push_back(2);
+    CV<int> v = { 3,4,6,1,3,8,2,3,7,3,4,9,1,5,89,1,2 };
 
+    my_for_each(v.begin(), v.end(), [](int n) {
+        std::cout << n << " ";
+        });
+    std::cout << std::endl;
 
-    for_each(v.begin(), v.end(), [](const int& n) { cout << n << " "; });
-    cout << endl;
-    auto result = find_if(v.begin(), v.end(), [](int n) { return n == 8; });
-    for_each(v.begin(), v.end(), [](const int& n)
+    //std::sort(v.begin(), v.end());
+
+    int i = 0;
+    std::for_each(v.begin(), v.end(), [&v, &i](int n)
+        {
+            if (n % 2 == 0)
+            {
+                v[i] *= 2;
+            }
+            i++;
+        });
+
+    std::for_each(v.begin(), v.end(), [](const int& n) { std::cout << n << " "; });
+    std::cout << std::endl;
+
+    auto max = std::find(v.begin(), v.end(), 89);
+    std::cout << max - &v[0] << std::endl;
+
+    auto result = std::find_if(v.begin(), v.end(), [](int n) { return n == 8; });
+
+    std::for_each(v.begin(), v.end(), [result, &v](const int& n)
     {
-        if (n == 8)
+        if (n == *result)
     { 
             
-        cout << n << " "; 
+            std::cout << result - &v[0] << std::endl;
     }});
     return 0;
 }
